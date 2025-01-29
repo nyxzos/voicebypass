@@ -108,6 +108,95 @@ function ReverseScriptString()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Arthurfillipy/Reverse-Mic_Up-Roblox-Pc-and-Mobile/refs/heads/main/Reverse-Mic_Up-Roblox-Pc-and-Mobile-Script.lua"))()
 end
 
+function resetLightingSettings()
+    -- Check it out, let me know what you think.
+    local Lighting = game:GetService("Lighting")
+    local SunRays = Lighting:FindFirstChildOfClass("SunRaysEffect")
+
+    Lighting.ClockTime = 14.5
+    Lighting.Brightness = 3
+    wait()
+    if not Lighting:FindFirstChildOfClass("Atmosphere") then
+        warn("Atmosphere not found, creating...")
+        wait(0.1)
+        local Atmosphere = Instance.new("Atmosphere")
+        Atmosphere.Name = "Atmosphere"
+        Atmosphere.Parent = Lighting
+        Atmosphere.Density = 0.3
+        Atmosphere.Offset = 0.25
+        Atmosphere.Color = Color3.fromRGB(199, 199, 199)
+        Atmosphere.Decay = Color3.fromRGB(106, 112, 125)
+        Atmosphere.Glare = 0
+        Atmosphere.Haze = 0
+    else
+        print("Atmosphere found, continuing...")
+        wait(0.1)
+        Lighting.Atmosphere.Density = 0.3
+        Lighting.Atmosphere.Offset = 0.25
+        Lighting.Atmosphere.Color = Color3.fromRGB(199, 199, 199)
+        Lighting.Atmosphere.Decay = Color3.fromRGB(106, 112, 125)
+        Lighting.Atmosphere.Glare = 0
+        Lighting.Atmosphere.Haze = 0
+    end
+    wait(0.1)
+    if not Lighting:FindFirstChildOfClass("BloomEffect") then
+        warn("Bloom was not found, creating...")
+        wait(0.1)
+        local Bloom = Instance.new("BloomEffect")
+        Bloom.Name = "Bloom"
+        Bloom.Parent = Lighting
+        Bloom.Intensity = 1
+        Bloom.Enabled = true
+        Bloom.Size = 24
+        Bloom.Threshold = 2
+    else
+        print("Found Bloom, continuing...")
+        wait(0.1)
+        Lighting.Bloom.Intensity = 1
+        Lighting.Bloom.Enabled = true
+        Lighting.Bloom.Size = 24
+        Lighting.Bloom.Threshold = 2
+    end
+    wait(0.1)
+    if not Lighting:FindFirstChildOfClass("DepthOfFieldEffect") then
+        warn("DepthOfField not found, creating...")
+        wait(0.1)
+        local DepthOfField = Instance.new("DepthOfFieldEffect")
+        DepthOfField.Name = "DepthOfField"
+        DepthOfField.Parent = Lighting
+        DepthOfField.Enabled = false
+        DepthOfField.FarIntensity = 0.1
+        DepthOfField.FocusDistance = 0.05
+        DepthOfField.InFocusRadius = 30
+        DepthOfField.NearIntensity = 0.75
+    else
+        print("DepthOfField found, continuing...")
+        wait(0.1)
+        Lighting.DepthOfField.Enabled = false
+        Lighting.DepthOfField.FarIntensity = 0.1
+        Lighting.DepthOfField.FocusDistance = 0.05
+        Lighting.DepthOfField.InFocusRadius = 30
+        Lighting.DepthOfField.NearIntensity = 0.75
+    end
+    wait(0.1)
+    if not Lighting:FindFirstChildOfClass("SunRaysEffect") then
+        warn("SunRays was not found, creating...")
+        wait(0.1)
+        local SunRays = Instance.new("SunRaysEffect")
+        SunRays.Name = "SunRays"
+        SunRays.Parent = Lighting
+        SunRays.Enabled = true
+        SunRays.Intensity = 0.01
+        SunRays.Spread = 0.1
+    else
+        print("SunRays found, continuing...")
+        wait(0.1)
+        Lighting.SunRays.Enabled = true
+        Lighting.SunRays.Intensity = 0.01
+        Lighting.SunRays.Spread = 0.1
+    end
+end
+
 function SetNightWLight()
     local Lighting = game:GetService("Lighting")
     if Lighting.ClockTime <= 2 then

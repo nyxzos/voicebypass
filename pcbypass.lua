@@ -234,8 +234,6 @@ end
 
 local VCOP = Window:CreateTab("Opções Gerais", "mic") -- Title, Image
 
-local TPSC = Window:CreateTab("Teleportes", "map-pin") -- Title, Image
-
 local SCPT = Window:CreateTab("Outros Scripts", "file-code-2") -- Title, Image
 
 local CFGS = Window:CreateTab("Configurações", "wrench") -- Title, Image

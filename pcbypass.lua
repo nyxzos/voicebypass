@@ -108,6 +108,21 @@ function ReverseScriptString()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Arthurfillipy/Reverse-Mic_Up-Roblox-Pc-and-Mobile/refs/heads/main/Reverse-Mic_Up-Roblox-Pc-and-Mobile-Script.lua"))()
 end
 
+function SetNightWLight()
+    local Lighting = game:GetService("Lighting")
+    if Lighting.ClockTime <= 2 then
+    Lighting.ClockTime = 1
+    wait()
+    Lighting.Brightness = 2
+    else
+    resetLightingSettings()
+    wait(0.2)
+    Lighting.ClockTime = 0
+    wait()
+    Lighting.Brightness = 0
+end
+
+
 function PrivateRoomAntiKill()
     for _, descendant in pairs(workspace:GetDescendants()) do
         if descendant:IsA("Script") and descendant.Name == "Kill" then
@@ -122,6 +137,8 @@ function PrivateRoomAntiKill()
 end
 
 local VCOP = Window:CreateTab("Opções Gerais", "mic") -- Title, Image
+
+local TPSC = Window:CreateTab("Teleportes", "map-pin") -- Title, Image
 
 local SCPT = Window:CreateTab("Outros Scripts", "file-code-2") -- Title, Image
 
@@ -192,7 +209,14 @@ local PRAK = VCOP:CreateButton({
     PrivateRoomAntiKill() -- The function that takes place when the button is pressed
     end,
  })
-   
+
+ local SetNightWithLight = VCOP:CreateButton({
+    Name = "Desativar Morte na Sala Privada",
+    Callback = function()
+    SetNightWLight() -- The function that takes place when the button is pressed
+    end,
+ })
+ 
 -- Other Scripts (SCPT)
 
 local LoadIY = SCPT:CreateButton({

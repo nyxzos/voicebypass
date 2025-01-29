@@ -212,6 +212,14 @@ function SetNightWLight()
     end
 end
 
+function SetDayTime()
+    local Lighting = game:GetService("Lighting")
+    Lighting.ClockTime = 12
+    wait()
+    Lighting.Brightness = 1.5
+    end
+end
+
 function PrivateRoomAntiKill()
     for _, descendant in pairs(workspace:GetDescendants()) do
         if descendant:IsA("Script") and descendant.Name == "Kill" then

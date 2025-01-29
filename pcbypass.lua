@@ -314,6 +314,13 @@ local PRAK = VCOP:CreateButton({
     end,
  })
  
+ local SetDayTime = VCOP:CreateButton({
+    Name = "Alterar Horário para Dia",
+    Callback = function()
+    SetDayTime() -- The function that takes place when the button is pressed
+    end,
+ })
+
 -- Other Scripts (SCPT)
 
 local LoadIY = SCPT:CreateButton({

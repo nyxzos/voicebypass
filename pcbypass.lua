@@ -111,17 +111,17 @@ end
 function SetNightWLight()
     local Lighting = game:GetService("Lighting")
     if Lighting.ClockTime <= 2 then
-    Lighting.ClockTime = 1
+        Lighting.ClockTime = 1
     wait()
-    Lighting.Brightness = 2
+        Lighting.Brightness = 2
     else
-    resetLightingSettings()
-    wait(0.2)
-    Lighting.ClockTime = 0
-    wait()
-    Lighting.Brightness = 0
+        resetLightingSettings()
+        wait(0.2)
+        Lighting.ClockTime = 0
+        wait()
+        Lighting.Brightness = 0
+    end
 end
-
 
 function PrivateRoomAntiKill()
     for _, descendant in pairs(workspace:GetDescendants()) do
@@ -211,7 +211,7 @@ local PRAK = VCOP:CreateButton({
  })
 
  local SetNightWithLight = VCOP:CreateButton({
-    Name = "Desativar Morte na Sala Privada",
+    Name = "Alterar Horário para Noite",
     Callback = function()
     SetNightWLight() -- The function that takes place when the button is pressed
     end,
@@ -265,7 +265,7 @@ local LoadRVS = SCPT:CreateButton({
 
 local DestroyGUI = CFGS:CreateButton({
    Name = "Remover Script (Unload)",
-   Callback = function()	
+   Callback = function()
    -- The function that takes place when the button is pressed
    end,
 })

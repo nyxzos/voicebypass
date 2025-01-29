@@ -217,7 +217,6 @@ function SetDayTime()
     Lighting.ClockTime = 12
     wait()
     Lighting.Brightness = 1.5
-    end
 end
 
 function PrivateRoomAntiKill()

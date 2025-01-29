@@ -1,4 +1,5 @@
-
+-- this is the Zacks Easy Hub, Inc. script
+-- i just changed some things on the code to make it work on solara since the last update isnt working right
 local function getExecutor()
     local name
     if identifyexecutor then
@@ -85,161 +86,6 @@ else
         }
     });
     return 
-end
-wait(0.2)
-if getgenv().clock_script_time then
-    warn("Already loaded Clock GUI or user has already clicked 'No'")
-else
-    if getgenv().Easies_Configuration["Script_Clock_Time_GUI"] == true then
-        local ClockGUI = Instance.new("ScreenGui")
-        local Clock_Frame = Instance.new("ImageLabel")
-        local time_label = Instance.new("TextLabel")
-        local Players = cloneref and cloneref(game:GetService("Players")) or game:GetService("Players")
-        local LocalPlayer = Players.LocalPlayer
-        local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-        local humanoidRootPart = Character and Character:FindFirstChild("HumanoidRootPart") or Character:WaitForChild("HumanoidRootPart", 1)
-        local HRP = humanoidRootPart
-        local HumanoidRootPart = humanoidRootPart
-        local hrp = humanoidRootPart
-        local Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid") or Character:WaitForChild("Humanoid", 1)
-        local human = Humanoid
-        local Human = Humanoid
-        local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-        local COREGUI = cloneref and cloneref(game:GetService("CoreGui")) or game:GetService("CoreGui")
-        local hiddenUI = get_hidden_gui or gethui
-
-        function randomString()
-            local length = math.random(10,20)
-            local array = {}
-            for i = 1, length do
-                array[i] = string.char(math.random(32, 126))
-            end
-            return table.concat(array)
-        end
-
-        PARENT = ClockGUI.Parent
-        if get_hidden_gui or gethui then
-            local hiddenUI = get_hidden_gui or gethui
-            local Main = ClockGUI
-            Main.Name = randomString()
-            Main.Parent = hiddenUI()
-            PARENT = Main
-        elseif (not is_sirhurt_closure) and (syn and syn.protect_gui) then
-            local Main = ClockGUI
-            Main.Name = randomString()
-            syn.protect_gui(Main)
-            Main.Parent = COREGUI
-            PARENT = Main
-        elseif COREGUI:FindFirstChild('RobloxGui') then
-            PARENT = COREGUI.RobloxGui
-        else
-            local Main = ClockGUI
-            Main.Name = randomString()
-            Main.Parent = COREGUI
-            PARENT = Main
-        end
-        wait(0.1)
-        ClockGUI.Name = randomString()
-        ClockGUI.ResetOnSpawn = false
-        ClockGUI.IgnoreGuiInset = true
-
-        Clock_Frame.Name = "Clock_Frame"
-        Clock_Frame.Parent = ClockGUI
-        Clock_Frame.Active = true
-        Clock_Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-        Clock_Frame.BackgroundTransparency = 1.000
-        Clock_Frame.BorderColor3 = Color3.fromRGB(27, 42, 53)
-        Clock_Frame.Position = UDim2.new(0.772566795, 0, 0.0113268606, 0)
-        Clock_Frame.Size = UDim2.new(0, 249, 0, 46)
-        Clock_Frame.Image = "rbxassetid://3570695787"
-        Clock_Frame.ImageColor3 = Color3.fromRGB(45, 45, 45)
-        Clock_Frame.ScaleType = Enum.ScaleType.Slice
-        Clock_Frame.SliceCenter = Rect.new(100, 100, 100, 100)
-        Clock_Frame.SliceScale = 0.120
-
-        time_label.Name = "time_label"
-        time_label.Parent = Clock_Frame
-        time_label.Active = true
-        time_label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        time_label.BackgroundTransparency = 1.000
-        time_label.BorderColor3 = Color3.fromRGB(0, 0, 0)
-        time_label.BorderSizePixel = 0
-        time_label.Position = UDim2.new(0, 0, -0.00659200316, 0)
-        time_label.Size = UDim2.new(0, 249, 0, 46)
-        time_label.Font = Enum.Font.Unknown
-        time_label.Text = "Detecting Script Time..."
-        time_label.TextColor3 = Color3.fromRGB(255, 255, 255)
-        time_label.TextScaled = true
-        time_label.TextSize = 14.000
-        time_label.TextWrapped = true
-        
-        local Lighting = cloneref and cloneref(game:GetService("Lighting")) or game:GetService("Lighting")
-        local Sky = Lighting:FindFirstChildOfClass("Sky")
-
-        Sky.SkyboxBk = "rbxassetid://591058823"
-        Sky.SkyboxDn = "rbxassetid://591059876"
-        Sky.SkyboxFt = "rbxassetid://591058104"
-        Sky.SkyboxLf = "rbxassetid://591057861"
-        Sky.SkyboxRt = "rbxassetid://591057625"
-        Sky.SkyboxUp = "rbxassetid://591059642"
-        Sky.StarCount = 10000
-
-        local function OMWZNSF_fake_script()
-            local hour = 6
-            local minute = 0
-            local isPM = false
-            getgenv().times_enabled_clock = true
-
-            local Lighting = game:GetService("Lighting")
-
-            local function formatTime(h, m, pm)
-                local period = pm and "PM" or "AM"
-                return string.format("%02d:%02d %s", h, m, period)
-            end
-
-            local function updateTime()
-                minute = minute + 1
-                if minute == 60 then
-                    minute = 0
-                    hour = hour + 1
-                end
-                if hour == 12 and minute == 0 then
-                    isPM = not isPM
-                elseif hour == 13 then
-                    hour = 1
-                end
-            end
-
-            local function updateLighting()
-                local clockHour = hour
-                if isPM and hour ~= 12 then
-                    clockHour = clockHour + 12
-                elseif not isPM and hour == 12 then
-                    clockHour = 0
-                end
-                Lighting.ClockTime = clockHour + (minute / 60)
-                
-                if Lighting.ClockTime >= 6 and Lighting.ClockTime <= 18 then
-                    Lighting.Brightness = 2
-                else
-                    Lighting.Brightness = 0.5
-                end
-            end
-
-            while getgenv().times_enabled_clock == true do
-                time_label.Text = formatTime(hour, minute, isPM)
-                wait(0.1)
-                updateLighting()
-                wait(1)
-                updateTime()
-            end
-        end
-        coroutine.wrap(OMWZNSF_fake_script)()
-        wait(0.3)
-        getgenv().clock_script_time = true
-    else
-        warn("Not enabled in Configuration.")
-    end
 end
 wait(0.5)
 -- These down here are actually quite useful as it also preserves a lot of room to, since defining local variables usually should stay inside the function, because the main gui wrapper, is inside a function, these can be used outside of the function as well.
@@ -542,60 +388,6 @@ wait(0.3)
         NewFolder.Name = "PartStorage"
         NewFolder.Parent = game:GetService("Workspace")
     end
-    wait(0.2)
-    -- Check our BasePlate, to correctly initialize an anti-void measure, which stretches extremely far.
-    if getgenv().passed_baseplate_check then
-        warn("Already loaded BasePlate check.")
-    else
-        if getgenv().Easies_Configuration["Huge_Baseplate"] == true then
-            getgenv().passed_baseplate_check = true
-            wait(0.2)
-            function do_baseplate_check()
-                local screenGui = Instance.new("ScreenGui") 
-                screenGui.IgnoreGuiInset = true
-                screenGui.Name = "BASEPLATE_LOADING"
-                screenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-                
-                local fullScreenFrame = Instance.new("Frame")
-                fullScreenFrame.Size = UDim2.new(1, 0, 1, 0)
-                fullScreenFrame.Position = UDim2.new(0, 0, 0, 0)
-                fullScreenFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-                fullScreenFrame.BackgroundTransparency = 0.3
-                fullScreenFrame.Parent = screenGui
-                
-                local textLabel = Instance.new("TextLabel")
-                textLabel.Name = "LABEL_BASEPLATE"
-                textLabel.Size = UDim2.new(0.8, 0, 0.2, 0)
-                textLabel.Position = UDim2.new(0.1, 0, 0.4, 0)
-                textLabel.BackgroundTransparency = 1
-                textLabel.Text = "Current Status: <font color=\"rgb(255,0,0)\">Frozen</font>\n--------------\n🎇 Zacks Easy Hub 🎇\n----------------------------\nIs creating a Baseplate,\n\nPlease wait until this screen disappears."
-                textLabel.RichText = true
-                textLabel.TextColor3 = Color3.fromRGB(163, 162, 165)
-                textLabel.TextScaled = true
-                textLabel.Font = Enum.Font.GothamBold
-                textLabel.Parent = fullScreenFrame
-                wait(0.2)
-                local Terrain = game:GetService("Workspace").Terrain
-
-                Terrain:FillBlock(CFrame.new(66, -10, 72.5), Vector3.new(13000, 16, 13000), Enum.Material.Asphalt)
-                wait(0.3)
-                if game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("BASEPLATE_LOADING") then
-                    local bruh_GUI = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("BASEPLATE_LOADING")
-                    bruh_GUI:FindFirstChildOfClass("Frame"):FindFirstChildOfClass("TextLabel").Text = "Current Status: <font color=\"rgb(0, 238, 0)\">Not Frozen</font>\n--------------\n🎇 Zacks Easy Hub 🎇\n----------------------------\nEnjoy your anti-void/BasePlate."
-                    wait(0.7)
-                    bruh_GUI:Destroy()
-                else
-                    warn("GUI does not exist, skipping...")
-                end
-            end
-
-            do_baseplate_check()
-            wait(0.2)
-            getgenv().passed_baseplate_check = true
-        else
-            warn("Not enabled in Configuration.")
-        end
-    end
 wait(0.2)
 local function getExecutor()
     local name
@@ -761,7 +553,7 @@ wait(0.1)
 if executor_Name ~= "Solara" then
     Window = Rayfield:CreateWindow({
         Name = "📜 Zacks Easy Hub 📜 | V7.5.0 | "..tostring(executor_Name),
-        LoadingTitle = "Enjoy ruling MIC UP 🔊",
+        LoadingTitle = "Modified by @nyxz.os",
         LoadingSubtitle = "Zacks Easy Hub | Success.",
         ConfigurationSaving = {
             Enabled = false,
@@ -787,7 +579,7 @@ if executor_Name ~= "Solara" then
 else
     Window = Rayfield:CreateWindow({
         Name = "📜 Zacks Easy Hub 📜 | V7.5.0 | "..tostring(executor_Name),
-        LoadingTitle = "Enjoy ruling MIC UP 🔊",
+        LoadingTitle = "Modified by @nyxz.os",
         LoadingSubtitle = "Zacks Easy Hub | Success.",
         ConfigurationSaving = {
             Enabled = false,

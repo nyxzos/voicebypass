@@ -1,36 +1,45 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+local player = game:GetService("Players").LocalPlayer
+
+Rayfield:Notify({
+   Title = "Inicializando...",
+   Content = "Por favor, aguarde.",
+   Duration = 1.5,
+   Image = "triangle-alert",
+})
+
 local Window = Rayfield:CreateWindow({
    Name = "Bypass de Voz",
-   Icon = "audio-lines", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-   LoadingTitle = "Bem-vindo!",
+   Icon = "audio-lines",
+   LoadingTitle = "Bem-vindo, " .. player.Name .. "!",
    LoadingSubtitle = "Feito por @nyxz.os",
-   Theme = "Default", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+   Theme = "Default",
 
    DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+   DisableBuildWarnings = false,
 
    ConfigurationSaving = {
       Enabled = false,
-      FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Big Hub"
+      FolderName = "NyBypassForMicUp",
+      FileName = "Config"
    },
 
    Discord = {
-      Enabled = true, -- Prompt the user to join your Discord server if their executor supports it
-      Invite = "39qBjvX4wD", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+      Enabled = true,
+      Invite = "39qBjvX4wD",
+      RememberJoins = true
    },
 
-   KeySystem = false, -- Set this to true to use our key system
+   KeySystem = false,
    KeySettings = {
       Title = "Untitled",
       Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+      Note = "No method of obtaining the key is provided",
+      FileName = "Key",
+      SaveKey = true,
+      GrabKeyFromSite = false,
+      Key = {"Hello"}
    }
 })
 
@@ -51,7 +60,7 @@ Rayfield:Notify({
 function VCReconnect()
 local voiceChatService = game:GetService("VoiceChatService")
     if voiceChatService then
-        voiceChatService:joinVoice()        
+        voiceChatService:joinVoice()
     else
         warn("VoiceChatService is not available.")
     end
@@ -70,11 +79,17 @@ function AutoVCRC()
                 wait(retryCooldown)
                 local success, err = pcall(function()
                     wait(0.5)
-                    print("Rejoining VoiceChat")
+                    print("Reiniciando Serviço de Voz, aguarde...")
                     vc_service:joinVoice()
+                    Rayfield:Notify({
+    Title = "Alerta!",
+    Content = "O Serviço de voz está sendo reiniciado! por favor, aguarde.",
+    Duration = 3,
+    Image = "unplug",
+ })
                 end)
                 if not success then
-                    warn("Error while rejoining voice chat:", err)
+                    warn("Ocorreu um erro.", err)
                 end
                 reconnecting = false
             end)
@@ -240,10 +255,18 @@ local CFGS = Window:CreateTab("Configurações", "wrench") -- Title, Image
 
 -- Voice Options (VCOP)
 
+local VCOPService = VCOP:CreateLabel("Opções do serviço de voz.", "radio")
+
 local VCRCButton = VCOP:CreateButton({
    Name = "Reiniciar Serviço de Voz",
    Callback = function()
    VCReconnect() -- The function that takes place when the button is pressed
+   Rayfield:Notify({
+    Title = "Alerta!",
+    Content = "O Serviço de voz está sendo reiniciado! por favor, aguarde.",
+    Duration = 3,
+    Image = "unplug",
+ })
    end,
 })
 
@@ -264,8 +287,16 @@ local KeybindVCRC = VCOP:CreateKeybind({
    Flag = "KeybindVCRC", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Keybind)
    VCReconnect() -- The function that takes place when the keybind is pressed
+   Rayfield:Notify({
+    Title = "Alerta!",
+    Content = "O Serviço de voz está sendo reiniciado! por favor, aguarde.",
+    Duration = 3,
+    Image = "unplug",
+ })
    end,
 })
+
+local VCOPMap = VCOP:CreateLabel("Baseplate e outras coisas relacionada ao mapa.", "map")
 
 local BaseplateSizeZ = VCOP:CreateSlider({
     Name = "Tamanho do Baseplate (Z)",
@@ -304,10 +335,18 @@ local PRAK = VCOP:CreateButton({
     end,
  })
 
+local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
+
  local SetNightWithLight = VCOP:CreateButton({
     Name = "Alterar Horário para Noite",
     Callback = function()
     SetNightWLight() -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        Title = "Boa noite!",
+        Content = "Alterando horário do jogo para Noite.",
+        Duration = 3,
+        Image = "moon",
+     })
     end,
  })
  
@@ -315,10 +354,18 @@ local PRAK = VCOP:CreateButton({
     Name = "Alterar Horário para Dia",
     Callback = function()
     SetDayTime() -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        Title = "Bom dia!",
+        Content = "Alterando horário do jogo para Dia.",
+        Duration = 3,
+        Image = "sun",
+     })
     end,
  })
 
 -- Other Scripts (SCPT)
+
+local SCPTLabel = SCPT:CreateLabel("Carregar outros scripts úteis.", "file-terminal")
 
 local LoadIY = SCPT:CreateButton({
    Name = "Carregar Infinite Yield",
@@ -364,9 +411,4 @@ local LoadRVS = SCPT:CreateButton({
 
 -- Settings (CFGS)
 
-local DestroyGUI = CFGS:CreateButton({
-   Name = "Remover Script (Unload)",
-   Callback = function()
-   -- The function that takes place when the button is pressed
-   end,
-})
+local CFGSLabel1 = CFGS:CreateLabel("Não há nada por aqui ainda.", "circle-help")

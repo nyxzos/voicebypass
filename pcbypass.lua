@@ -10,52 +10,54 @@ Rayfield:Notify({
 })
 
 local Window = Rayfield:CreateWindow({
-   Name = "Bypass de Voz",
-   Icon = "audio-lines",
-   LoadingTitle = "Bem-vindo, " .. player.Name .. "!",
-   LoadingSubtitle = "Feito por @nyxz.os",
-   Theme = "Default",
+    Name = "Bypass de Voz - " .. player.Name .. "",
+    Icon = "audio-lines",
+    LoadingTitle = "Bem-vindo, " .. player.Name .. "!",
+    LoadingSubtitle = "Feito por @nyxz.os",
+    Theme = "Default",
+ 
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false,
+ 
+    ConfigurationSaving = {
+       Enabled = false,
+       FolderName = "NyBypassForMicUp",
+       FileName = "Config"
+    },
+ 
+    Discord = {
+       Enabled = true,
+       Invite = "39qBjvX4wD",
+       RememberJoins = true
+    },
+ 
+    KeySystem = false,
+    KeySettings = {
+       Title = "Untitled",
+       Subtitle = "Key System",
+       Note = "No method of obtaining the key is provided",
+       FileName = "Key",
+       SaveKey = true,
+       GrabKeyFromSite = false,
+       Key = {"Hello"}
+    }
+ })
 
-   DisableRayfieldPrompts = false,
-   DisableBuildWarnings = false,
-
-   ConfigurationSaving = {
-      Enabled = false,
-      FolderName = "NyBypassForMicUp",
-      FileName = "Config"
-   },
-
-   Discord = {
-      Enabled = true,
-      Invite = "39qBjvX4wD",
-      RememberJoins = true
-   },
-
-   KeySystem = false,
-   KeySettings = {
-      Title = "Untitled",
-      Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided",
-      FileName = "Key",
-      SaveKey = true,
-      GrabKeyFromSite = false,
-      Key = {"Hello"}
-   }
-})
+function NotifySound()
+    local User_Input_Service = game:GetService("UserInputService")
+        local Sound_Service = game:GetService("SoundService")
+        local Sound = Instance.new("Sound",Sound_Service)
+        Sound.SoundId = "rbxassetid://17208361335"
+        Sound:Play()
+end
 
 Rayfield:Notify({
-   Title = "Bem-vindo!",
-   Content = "Aviso! Caso você seja denunciado em massa, sua conta poderá ser banida por um dia ou mais.",
-   Duration = 10,
-   Image = "triangle-alert",
-})
-
-Rayfield:Notify({
-   Title = "Como usar?",
-   Content = "Após levar a suspensão, abra o script e aperte na opção de reiniciar o serviço de voz. Você também pode usar o modo automático.",
-   Duration = 30,
-   Image = "circle-help",
-})
+    NotifySound(),
+    Title = "Bem-vindo, " .. player.Name .. "!",
+    Content = "Aviso! Caso você seja denunciado em massa, sua conta poderá ser banida por um dia ou mais.",
+    Duration = 10,
+    Image = "triangle-alert",
+ })
 
 function VCReconnect()
 local voiceChatService = game:GetService("VoiceChatService")
@@ -82,6 +84,7 @@ function AutoVCRC()
                     print("Reiniciando Serviço de Voz, aguarde...")
                     vc_service:joinVoice()
                     Rayfield:Notify({
+                        NotifySound(),
     Title = "Alerta!",
     Content = "O Serviço de voz está sendo reiniciado! por favor, aguarde.",
     Duration = 3,
@@ -234,6 +237,10 @@ function SetDayTime()
     Lighting.Brightness = 1.5
 end
 
+function TeleportService()
+    local TeleportService = game:GetService("TeleportService")
+end
+
 function PrivateRoomAntiKill()
     for _, descendant in pairs(workspace:GetDescendants()) do
         if descendant:IsA("Script") and descendant.Name == "Kill" then
@@ -242,16 +249,16 @@ function PrivateRoomAntiKill()
             if touchInterest then
                 touchInterest:Destroy()
             end
-            descendant:Destroy()
+                descendant:Destroy()
         end
     end
 end
 
-local VCOP = Window:CreateTab("Opções Gerais", "mic") -- Title, Image
+local VCOP = Window:CreateTab("Opções Gerais", "mic")
 
-local SCPT = Window:CreateTab("Outros Scripts", "file-code-2") -- Title, Image
+local SCPT = Window:CreateTab("Outros Scripts", "file-code-2")
 
-local CFGS = Window:CreateTab("Configurações", "wrench") -- Title, Image
+local CFGS = Window:CreateTab("Configurações", "wrench")
 
 -- Voice Options (VCOP)
 
@@ -260,8 +267,9 @@ local VCOPService = VCOP:CreateLabel("Opções do serviço de voz.", "radio")
 local VCRCButton = VCOP:CreateButton({
    Name = "Reiniciar Serviço de Voz",
    Callback = function()
-   VCReconnect() -- The function that takes place when the button is pressed
+   VCReconnect()
    Rayfield:Notify({
+    NotifySound(),
     Title = "Alerta!",
     Content = "O Serviço de voz está sendo reiniciado! por favor, aguarde.",
     Duration = 3,
@@ -284,10 +292,11 @@ local KeybindVCRC = VCOP:CreateKeybind({
    Name = "Atalho para (Reiniciar Serviço)",
    CurrentKeybind = "L",
    HoldToInteract = false,
-   Flag = "KeybindVCRC", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "KeybindVCRC",
    Callback = function(Keybind)
-   VCReconnect() -- The function that takes place when the keybind is pressed
+   VCReconnect()
    Rayfield:Notify({
+    NotifySound(),
     Title = "Alerta!",
     Content = "O Serviço de voz está sendo reiniciado! por favor, aguarde.",
     Duration = 3,
@@ -331,7 +340,14 @@ end,
 local PRAK = VCOP:CreateButton({
     Name = "Desativar Morte na Sala Privada",
     Callback = function()
-    PrivateRoomAntiKill() -- The function that takes place when the button is pressed
+    PrivateRoomAntiKill()
+    Rayfield:Notify({
+        NotifySound(),
+        Title = "Aplicado!",
+        Content = "Você não irá mais morrer após tocar o chão da sala privada.",
+        Duration = 3,
+        Image = "check",
+     })
     end,
  })
 
@@ -340,8 +356,9 @@ local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
  local SetNightWithLight = VCOP:CreateButton({
     Name = "Alterar Horário para Noite",
     Callback = function()
-    SetNightWLight() -- The function that takes place when the button is pressed
+    SetNightWLight()
     Rayfield:Notify({
+        NotifySound(),
         Title = "Boa noite!",
         Content = "Alterando horário do jogo para Noite.",
         Duration = 3,
@@ -353,8 +370,9 @@ local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
  local SetDayTime = VCOP:CreateButton({
     Name = "Alterar Horário para Dia",
     Callback = function()
-    SetDayTime() -- The function that takes place when the button is pressed
+    SetDayTime() NotifySound()
     Rayfield:Notify({
+        NotifySound(),
         Title = "Bom dia!",
         Content = "Alterando horário do jogo para Dia.",
         Duration = 3,
@@ -370,45 +388,109 @@ local SCPTLabel = SCPT:CreateLabel("Carregar outros scripts úteis.", "file-term
 local LoadIY = SCPT:CreateButton({
    Name = "Carregar Infinite Yield",
    Callback = function()
-   IYScriptString() -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        NotifySound(),
+        Title = "Executando script...",
+        Content = "Carregando Infinite Yield. Aguarde alguns segundos, por favor.",
+        Duration = 2.5,
+        Image = "file-code",
+    })
+   IYScriptString()
    end,
 })
 
 local LoadSB = SCPT:CreateButton({
    Name = "Carregar System Broken",
    Callback = function()
-   SystemBrokenScriptString() -- The function that takes place when the button is pressed
+   Rayfield:Notify({
+    NotifySound(),
+    Title = "Executando script...",
+    Content = "Carregando System Broken. Aguarde alguns segundos, por favor.",
+    Duration = 2.5,
+    Image = "file-code",
+    })
+   SystemBrokenScriptString()
    end,
 })
 
 local LoadEH = SCPT:CreateButton({
    Name = "Carregar Eclipse Hub (Solara - PC Somente)",
    Callback = function()
-   EclipseHubScriptString() -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        NotifySound(),
+        Title = "Executando script...",
+        Content = "Carregando Eclipse Hub. Aguarde alguns segundos, por favor.",
+        Duration = 2.5,
+        Image = "file-code",
+     })
+   EclipseHubScriptString()
    end,
 })
 
 local LoadGE = SCPT:CreateButton({
    Name = "Carregar Graphics Enhancer",
    Callback = function()
-   GraphicsEnhancerScriptString() -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        NotifySound(),
+        Title = "Executando script...",
+        Content = "Carregando Graphics Enhancer. Aguarde alguns segundos, por favor.",
+        Duration = 2.5,
+        Image = "file-code",
+     })
+   GraphicsEnhancerScriptString()
    end,
 })
 
 local LoadFEG = SCPT:CreateButton({
    Name = "Carregar Free Emotes GUI",
    Callback = function()
-   FreeEmotesGUIScriptString() -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        NotifySound(),
+        Title = "Executando script...",
+        Content = "Carregando Free Emotes GUI. Aguarde alguns segundos, por favor.",
+        Duration = 2.5,
+        Image = "file-code",
+     })
+   FreeEmotesGUIScriptString()
    end,
 })
 
 local LoadRVS = SCPT:CreateButton({
    Name = "Carregar Reverse Script",
    Callback = function()
-   ReverseScriptString() -- The function that takes place when the button is pressed
+    Rayfield:Notify({
+        NotifySound(),
+        Title = "Executando script...",
+        Content = "Carregando Reverse Script. Aguarde alguns segundos, por favor.",
+        Duration = 2.5,
+        Image = "file-code",
+     })
+   ReverseScriptString()
    end,
 })
 
 -- Settings (CFGS)
 
-local CFGSLabel1 = CFGS:CreateLabel("Não há nada por aqui ainda.", "circle-help")
+local RejoinServer = CFGS:CreateButton({
+    Name = "Reingressar no Servidor",
+    Callback = function()
+        Rayfield:Notify({
+            NotifySound(),
+            Title = "Reingressando no servidor.",
+            Content = "Por favor, aguarde...",
+            Duration = 3,
+            Image = "server",
+         })
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId) 
+    end,
+ })
+
+wait(7)
+
+ Rayfield:Notify({
+    NotifySound(),
+    Title = "Como usar?",
+    Content = "Após levar a suspensão, abra o script e aperte na opção de reiniciar o serviço de voz. Você também pode usar o modo automático.",
+    Duration = 30,
+    Image = "circle-help",
+ })

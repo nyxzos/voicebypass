@@ -1,6 +1,24 @@
+if _G.ScriptExecuted == nil then
+    _G.ScriptExecuted = false  -- Garantir que a variável comece como 'false'
+end
+
+-- Verificando se o script já foi executado
+if _G.ScriptExecuted then
+    warn("Script já em execução, ative nas configurações para permitir múltiplas execuções.")
+    return  -- Impede a execução do script
+else
+    -- Se o script não foi executado antes, marca como executado
+    _G.ScriptExecuted = true
+end
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local player = game:GetService("Players").LocalPlayer
+
+if not Rayfield then
+    warn("Rayfield não carregado corretamente!")
+    return
+end
 
 Rayfield:Notify({
    Title = "Inicializando...",
@@ -43,11 +61,22 @@ local Window = Rayfield:CreateWindow({
     }
  })
 
+ local function resetExecution()
+    _G.ScriptExecuted = false
+    Rayfield:Notify({
+        NotifySound(),
+        Title = "Execução Reiniciada!",
+        Content = "O script pode ser executado novamente.",
+        Duration = 3,
+        Image = "check",
+    })
+end
+
 function NotifySound()
     local User_Input_Service = game:GetService("UserInputService")
         local Sound_Service = game:GetService("SoundService")
         local Sound = Instance.new("Sound",Sound_Service)
-        Sound.SoundId = "rbxassetid://17208361335"
+        Sound.SoundId = "rbxassetid://8183296024"
         Sound:Play()
 end
 
@@ -293,6 +322,20 @@ local CFGS = Window:CreateTab("Configurações", "wrench")
 
 -- Voice Options (VCOP)
 
+local VCOPSelf = VCOP:CreateLabel("Coisas relacionadas ao seu player.", "person-standing")
+
+local PlayerWalkspeed = VCOP:CreateSlider({
+    Name = "Velocidade do Player",
+    Range = {0, 150},
+    Increment = 1,
+    Suffix = " Speed",
+    CurrentValue = 16,
+    Flag = "PlayerWalkspeed", 
+    Callback = function(Size_New)
+        player.Character.Humanoid.WalkSpeed = Size_New
+    end,
+})
+
 local VCOPService = VCOP:CreateLabel("Opções do serviço de voz.", "radio")
 
 local VCRCButton = VCOP:CreateButton({
@@ -516,12 +559,42 @@ local RejoinServer = CFGS:CreateButton({
     end,
  })
 
-wait(7)
+ local AllowMultiInstanceToggle = CFGS:CreateToggle({
+    Name = "Permitir Execução Múltipla",
+    CurrentValue = not _G.ScriptExecuted,
+    Flag = "AllowMultiInstanceToggle", 
+    Callback = function(Value)
+        if Value then
+            _G.ScriptExecuted = false
+            Rayfield:Notify({
+                NotifySound(),
+                Title = "Execução Permitida!",
+                Content = "O script pode ser executado mais de uma vez agora.",
+                Duration = 3,
+                Image = "check",
+            })
+        else
+            _G.ScriptExecuted = true
+        end
+    end,
+})
+
+wait(10)
 
  Rayfield:Notify({
     NotifySound(),
     Title = "Como usar?",
     Content = "Após levar a suspensão, abra o script e aperte na opção de reiniciar o serviço de voz. Você também pode usar o modo automático.",
-    Duration = 30,
+    Duration = 15,
     Image = "circle-help",
+ })
+
+wait(15)
+
+Rayfield:Notify({
+    NotifySound(),
+    Title = "Alerta!",
+    Content = "Algumas funções desse script funcionam somente no (MIC UP), isso pode causar Callback Error se for usada em outros jogos.",
+    Duration = 15,
+    Image = "triangle-alert",
  })

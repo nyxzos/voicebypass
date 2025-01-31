@@ -127,7 +127,6 @@ function ReverseScriptString()
 end
 
 function resetLightingSettings()
-    -- Check it out, let me know what you think.
     local Lighting = game:GetService("Lighting")
     local SunRays = Lighting:FindFirstChildOfClass("SunRaysEffect")
 
@@ -239,6 +238,38 @@ end
 
 function TeleportService()
     local TeleportService = game:GetService("TeleportService")
+end
+
+function AudioInputToggle()
+    local UserInputService = game:GetService("UserInputService")
+    local Audio_Device_Input = getgenv().LocalPlayer.AudioDeviceInput
+    local isMuted = false
+    Audio_Device_Input.Muted = isMuted
+    local AudioDeviceInput = user:FindFirstChildOfClass("AudioDeviceInput")
+    local function onInputBegan(input, gameProcessed)
+        if gameProcessed then return end
+        if input.KeyCode == Enum.KeyCode.RightControl then
+            isMuted = not isMuted
+            Audio_Device_Input.Muted = isMuted
+            if isMuted then
+                Rayfield:Notify({
+                    NotifySound(),
+                    Title = "Alerta!",
+                    Content = "Microfone silenciado!",
+                    Duration = 2,
+                    Image = "mic-off",
+                 })
+            else
+                Rayfield:Notify({
+                    NotifySound(),
+                    Title = "Alerta!",
+                    Content = "Microfone desilenciado!",
+                    Duration = 2,
+                    Image = "mic",
+                 })
+            end
+        end
+    end
 end
 
 function PrivateRoomAntiKill()

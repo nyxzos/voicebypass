@@ -80,6 +80,14 @@ function NotifySound()
         Sound:Play()
 end
 
+function NotifyErrorSound()
+    local User_Input_Service = game:GetService("UserInputService")
+        local Sound_Service = game:GetService("SoundService")
+        local Sound = Instance.new("Sound",Sound_Service)
+        Sound.SoundId = "rbxassetid://8499261098"
+        Sound:Play()
+end
+
 Rayfield:Notify({
     NotifySound(),
     Title = "Bem-vindo, " .. player.Name .. "!",
@@ -93,6 +101,13 @@ local voiceChatService = game:GetService("VoiceChatService")
     if voiceChatService then
         voiceChatService:joinVoice()
     else
+        Rayfield:Notify({
+            NotifyErrorSound(),
+            Title = "Erro!",
+            Content = "Algo inesperado aconteceu. 'VoiceChatService' não está disponível. :(",
+            Duration = 5,
+            Image = "ban",
+         })
         warn("VoiceChatService is not available.")
     end
 end
@@ -133,6 +148,10 @@ end
 
 function IYScriptString()
     loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+end
+
+function CMDXScriptString()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/CMD-X/CMD-X/master/Source",true))()    
 end
 
 function SystemBrokenScriptString()
@@ -392,12 +411,12 @@ function AudioInputToggle()
     else
         warn("AudioDeviceInput não encontrado!")
         Rayfield:Notify({
-            NotifySound(),
+            NotifyErrorSound(),
             Title = "Erro!",
-            Content = "AudioDeviceInput não encontrado.",
-            Duration = 3,
-            Image = "error",
-        })
+            Content = "Algo inesperado aconteceu. 'AudioDeviceInput' não está disponível. :(",
+            Duration = 5,
+            Image = "ban",
+         })
     end
 end
 
@@ -528,7 +547,7 @@ local PRAK = VCOP:CreateButton({
     Rayfield:Notify({
         NotifySound(),
         Title = "Aplicado!",
-        Content = "Você não irá mais morrer após tocar o chão da sala privada.",
+        Content = "Você não irá mais morrer após tocar o chão da sala privada. :)",
         Duration = 3,
         Image = "check",
      })
@@ -544,7 +563,7 @@ local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
     Rayfield:Notify({
         NotifySound(),
         Title = "Boa noite!",
-        Content = "Alterando horário do jogo para Noite.",
+        Content = "Alterando horário do jogo para noite. :)",
         Duration = 3,
         Image = "moon",
      })
@@ -558,7 +577,7 @@ local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
     Rayfield:Notify({
         NotifySound(),
         Title = "Bom dia!",
-        Content = "Alterando horário do jogo para Dia.",
+        Content = "Alterando horário do jogo para dia. :)",
         Duration = 3,
         Image = "sun",
      })
@@ -583,6 +602,20 @@ local LoadIY = SCPT:CreateButton({
    end,
 })
 
+local LoadIY = SCPT:CreateButton({
+    Name = "Carregar CMD-X (Luna - PC)",
+    Callback = function()
+     Rayfield:Notify({
+         NotifySound(),
+         Title = "Executando script...",
+         Content = "Carregando CMD-X. Aguarde alguns segundos, por favor.",
+         Duration = 2.5,
+         Image = "file-code",
+     })
+    CMDXScriptString()
+    end,
+ })
+
 local LoadSB = SCPT:CreateButton({
    Name = "Carregar System Broken",
    Callback = function()
@@ -598,7 +631,7 @@ local LoadSB = SCPT:CreateButton({
 })
 
 local LoadEH = SCPT:CreateButton({
-   Name = "Carregar Eclipse Hub (Solara - PC Somente)",
+   Name = "Carregar Eclipse Hub (Solara/Nihon/Wave/AWP - PC)",
    Callback = function()
     Rayfield:Notify({
         NotifySound(),
@@ -640,7 +673,7 @@ local LoadFEG = SCPT:CreateButton({
 })
 
 local LoadRVS = SCPT:CreateButton({
-   Name = "Carregar Reverse Script",
+   Name = "Carregar Reverse Script (Segure E - PC)",
    Callback = function()
     Rayfield:Notify({
         NotifySound(),
@@ -701,10 +734,34 @@ wait(10)
 
 wait(15.5)
 
-Rayfield:Notify({
-    NotifySound(),
+local validPlaceIds = {6884319169, 15546218972}
+
+local isValidPlace = false
+for _, placeId in pairs(validPlaceIds) do
+    if game.PlaceId == placeId then
+        isValidPlace = true
+        break
+    end
+end
+
+if not isValidPlace then
+    Rayfield:Notify({
+    ErrorNotifySound(),
     Title = "Alerta!",
-    Content = "Algumas funções desse script funcionam somente no (MIC UP), isso pode causar Callback Error se for usada em outros jogos.",
+    Content = "Algumas funções desse script funcionam somente no (MIC UP), isso pode causar Callback Error se for usada em alguns jogos.",
     Duration = 15,
     Image = "triangle-alert",
  })
+end
+
+wait(30)
+
+ Rayfield:Notify({
+    NotifySound(),
+    Title = "aproveite :)",
+    Content = "fiz essa porra com carinho, se cuida. <3",
+    Duration = 5,
+    Image = "heart",
+ })
+
+-- The script ends here.

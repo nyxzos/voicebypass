@@ -1,13 +1,11 @@
 if _G.ScriptExecuted == nil then
-    _G.ScriptExecuted = false  -- Garantir que a variável comece como 'false'
+    _G.ScriptExecuted = false
 end
 
--- Verificando se o script já foi executado
 if _G.ScriptExecuted then
     warn("Script já está em execução, ative nas configurações para permitir múltiplas execuções.")
-    return  -- Impede a execução do script
+    return
 else
-    -- Se o script não foi executado antes, marca como executado
     _G.ScriptExecuted = true
 end
 
@@ -20,16 +18,20 @@ print("Carregando Interface")
 local player = game:GetService("Players").LocalPlayer
 
 if not Rayfield then
-    warn("Rayfield não carregado corretamente!")
+    warn("Interface não foi carregada.")
     return
 end
 
 local blacklist = {
-    0,  -- Substitua pelo ID real do jogador
-    0,  -- Outro ID de exemplo
+    0,
+    0,
 }
 
--- Função para verificar se o usuário está na blacklist
+local devIds = {
+    1827004776, -- nyyztx
+    0,
+}
+
 local function isBlacklisted(player)
     for _, id in ipairs(blacklist) do
         if player.UserId == id then
@@ -39,17 +41,25 @@ local function isBlacklisted(player)
     return false
 end
 
--- Função para exibir a notificação
-local function sendNotification(player)
-    Rayfield:Notify({
-        Title = "Ocorreu um erro.",
-        Content = "Ah não! Houve uma falha durante o carregamento do script. Por favor, entre em contato via Discord. @nyxz.os",
-        Duration = 30,
-        Image = "ban",
-     })
+local function isDeveloper(player)
+    for _, id in ipairs(devIds) do
+        if player.UserId == id then
+            return true
+        end
+    end
+    return false
 end
 
--- Verifica se o jogador que executa o script está na blacklist
+local function sendNotification(player)
+    local randomIDBL = tostring(math.random(10000, 99999))
+    Rayfield:Notify({
+        Title = "Ocorreu um erro.",
+        Content = "Por favor, entre em contato com o desenvolvedor. @nyxz.os\nID do Usuário : " .. player.UserId .. "\nCódigo : " .. randomIDBL .. "",
+        Duration = 30,
+        Image = "user-round-minus",
+    })
+end
+
 local player = game.Players.LocalPlayer
 
 Rayfield:Notify({
@@ -59,9 +69,8 @@ Rayfield:Notify({
    Image = "triangle-alert",
 })
 
--- Função para pegar a saudação com base no horário
 local function getGreeting()
-    local hour = tonumber(os.date("%H"))  -- Hora atual em formato de 24 horas (00 a 23)
+    local hour = tonumber(os.date("%H")) 
 
     if hour >= 5 and hour < 12 then
         return "Bom dia"
@@ -72,14 +81,12 @@ local function getGreeting()
     end
 end
 
--- Saudação baseada no horário
 local greeting = getGreeting()
 
--- Criando a janela com a saudação dinâmica
 local Window = Rayfield:CreateWindow({
-    Name = "Bypass de Voz - Olá, " .. player.Name .. "!" .. " V1.5",
+    Name = "Bypass de Voz - " .. greeting .. ", " .. player.Name .. "! ",
     Icon = "audio-lines",
-    LoadingTitle = greeting .. ", " .. player.Name .. "!",  -- Saudação dinâmica aqui
+    LoadingTitle = greeting .. ", " .. player.Name .. "!",
     LoadingSubtitle = "Feito por @nyxz.os",
     Theme = "Default",
  
@@ -98,22 +105,24 @@ local Window = Rayfield:CreateWindow({
        RememberJoins = true
     },
     
-    KeySystem = false,
+    KeySystem =  false,
     KeySettings = {
-       Title = "null",
-       Subtitle = "null",
-       Note = "null",
-       FileName = "Key",
-       SaveKey = true,
+       Title = "nil",
+       Subtitle = "nil",
+       Note = "nil",
+       FileName = "nil",
+       SaveKey = false,
        GrabKeyFromSite = false,
-       Key = {"Hello"}
+       Key = {"nil"}
     }
  })
- 
+
  if isBlacklisted(player) then
-    warn("User " .. player.Name .. " isn't allowed to run the script.")
+    warn("User : " .. player.Name)
+    warn("ID : " .. player.UserId)
+    warn("Restricted Account.")
     sendNotification(player)
-    return -- Impede a execução do script
+    return
 end
 
  local function resetExecution()
@@ -127,6 +136,16 @@ function NotifySound()
         local Sound_Service = game:GetService("SoundService")
         local Sound = Instance.new("Sound",Sound_Service)
         Sound.SoundId = "rbxassetid://8183296024"
+        Sound:Play()
+end
+
+print("Carregando Função [NotifySound]")
+
+function NotifyDevSound()
+    local User_Input_Service = game:GetService("UserInputService")
+        local Sound_Service = game:GetService("SoundService")
+        local Sound = Instance.new("Sound",Sound_Service)
+        Sound.SoundId = "rbxassetid://8503529653"
         Sound:Play()
 end
 
@@ -343,6 +362,12 @@ function InvisibleScriptString()
     loadstring(game:HttpGet("https://pastebin.com/raw/UWZDK9Q8"))()
  end
 
+ print("Carregando Função [DEXExplorerScriptString]")
+
+ local function DEXExplorerScriptString()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/main/dex.lua"))()
+end
+
 print("Carregando Função [resetLightingSettings]")
 
 function resetLightingSettings()
@@ -457,7 +482,6 @@ function TeleportService()
     local TeleportService = game:GetService("TeleportService")
 end
 
--- Variável para armazenar o estado de silenciado/desilenciado
 local isMuted = false
 
 print("Carregando Função [AudioInputToggle]")
@@ -466,15 +490,12 @@ function AudioInputToggle()
     local UserInputService = game:GetService("UserInputService")
     local player = game.Players.LocalPlayer
 
-    -- Certifique-se de que o AudioDeviceInput existe
     local Audio_Device_Input = player:FindFirstChild("AudioDeviceInput")
 
     if Audio_Device_Input then
-        -- Alterna o estado de silenciado
         isMuted = not isMuted
         Audio_Device_Input.Muted = isMuted
 
-        -- Notificação dependendo do estado
         if isMuted then
             Rayfield:Notify({
                 NotifySound(),
@@ -549,6 +570,191 @@ function PrivateRoomAntiKill()
     end
 end
 
+print("Carregando Função [Fly]")
+
+local function getRoot(char)
+    local rootPart = char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
+    return rootPart
+end
+
+local IYMouse = player:GetMouse()
+
+local flySpeed = 10
+
+local function sFLY(vfly)
+    repeat wait() until player and player.Character and getRoot(player.Character) and player.Character:FindFirstChildOfClass("Humanoid")
+    repeat wait() until IYMouse
+    if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect() flyKeyUp:Disconnect() end
+
+    local T = getRoot(player.Character)
+    local CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+    local lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+    local SPEED = 0
+
+    local function FLY()
+        FLYING = true
+        local BG = Instance.new('BodyGyro')
+        local BV = Instance.new('BodyVelocity')
+        BG.P = 9e4
+        BG.Parent = T
+        BV.Parent = T
+        BG.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+        BG.cframe = T.CFrame
+        BV.velocity = Vector3.new(0, 0, 0)
+        BV.maxForce = Vector3.new(9e9, 9e9, 9e9)
+        task.spawn(function()
+            repeat wait()
+                if not vfly and player.Character:FindFirstChildOfClass('Humanoid') then
+                    player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = true
+                end
+                if CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0 then
+                    SPEED = flySpeed
+                elseif not (CONTROL.L + CONTROL.R ~= 0 or CONTROL.F + CONTROL.B ~= 0 or CONTROL.Q + CONTROL.E ~= 0) and SPEED ~= 0 then
+                    SPEED = 0
+                end
+                if (CONTROL.L + CONTROL.R) ~= 0 or (CONTROL.F + CONTROL.B) ~= 0 or (CONTROL.Q + CONTROL.E) ~= 0 then
+                    BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (CONTROL.F + CONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(CONTROL.L + CONTROL.R, (CONTROL.F + CONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                    lCONTROL = {F = CONTROL.F, B = CONTROL.B, L = CONTROL.L, R = CONTROL.R}
+                elseif (CONTROL.L + CONTROL.R) == 0 and (CONTROL.F + CONTROL.B) == 0 and (CONTROL.Q + CONTROL.E) == 0 and SPEED ~= 0 then
+                    BV.velocity = ((workspace.CurrentCamera.CoordinateFrame.lookVector * (lCONTROL.F + lCONTROL.B)) + ((workspace.CurrentCamera.CoordinateFrame * CFrame.new(lCONTROL.L + lCONTROL.R, (lCONTROL.F + lCONTROL.B + CONTROL.Q + CONTROL.E) * 0.2, 0).p) - workspace.CurrentCamera.CoordinateFrame.p)) * SPEED
+                else
+                    BV.velocity = Vector3.new(0, 0, 0)
+                end
+                BG.cframe = workspace.CurrentCamera.CoordinateFrame
+            until not FLYING
+            CONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+            lCONTROL = {F = 0, B = 0, L = 0, R = 0, Q = 0, E = 0}
+            SPEED = 0
+            BG:Destroy()
+            BV:Destroy()
+            if player.Character:FindFirstChildOfClass('Humanoid') then
+                player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+            end
+        end)
+    end
+    flyKeyDown = IYMouse.KeyDown:Connect(function(KEY)
+        if KEY:lower() == 'w' then
+            CONTROL.F = (vfly and vehicleflyspeed or flySpeed)
+        elseif KEY:lower() == 's' then
+            CONTROL.B = - (vfly and vehicleflyspeed or flySpeed)
+        elseif KEY:lower() == 'a' then
+            CONTROL.L = - (vfly and vehicleflyspeed or flySpeed)
+        elseif KEY:lower() == 'd' then 
+            CONTROL.R = (vfly and vehicleflyspeed or flySpeed)
+        elseif QEfly and KEY:lower() == 'e' then
+            CONTROL.Q = (vfly and vehicleflyspeed or flySpeed)*2
+        elseif QEfly and KEY:lower() == 'q' then
+            CONTROL.E = -(vfly and vehicleflyspeed or flySpeed)*2
+        end
+        pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Track end)
+    end)
+    flyKeyUp = IYMouse.KeyUp:Connect(function(KEY)
+        if KEY:lower() == 'w' then
+            CONTROL.F = 0
+        elseif KEY:lower() == 's' then
+            CONTROL.B = 0
+        elseif KEY:lower() == 'a' then
+            CONTROL.L = 0
+        elseif KEY:lower() == 'd' then
+            CONTROL.R = 0
+        elseif KEY:lower() == 'e' then
+            CONTROL.Q = 0
+        elseif KEY:lower() == 'q' then
+            CONTROL.E = 0
+        end
+    end)
+    FLY()
+end
+
+local function NOFLY()
+    FLYING = false
+    if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect() flyKeyUp:Disconnect() end
+    if player.Character:FindFirstChildOfClass('Humanoid') then
+        player.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+    end
+    pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Custom end)
+end
+
+local function toggleFly()
+    if FLYING then
+        NOFLY()
+        Rayfield:Notify({
+            NotifySound(),
+            Title = "Alerta!",
+            Content = "Desativei a levitação. :)",
+            Duration = 1.5,
+            Image = "plane",
+         })
+    else
+        sFLY(false)
+        Rayfield:Notify({
+            NotifySound(),
+            Title = "Alerta!",
+            Content = "Ativei a levitação. :)",
+            Duration = 1.5,
+            Image = "plane",
+         })
+    end
+end
+
+print("Carregando Função [toggleNoclip]")
+
+local noclipEnabled = false
+
+local function toggleNoclip()
+    noclipEnabled = not noclipEnabled
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    
+    if noclipEnabled then
+        Rayfield:Notify({
+            NotifySound(),
+            Title = "Alerta!",
+            Content = "Noclip ativado.",
+            Duration = 2,
+            Image = "ghost",
+        })
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    else
+        Rayfield:Notify({
+            NotifySound(),
+            Title = "Alerta!",
+            Content = "Noclip desativado.",
+            Duration = 2,
+            Image = "ghost",
+        })
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+    end
+end
+
+print("Carregando Função [ClickTP]")
+
+local UserInputService = game:GetService("UserInputService")
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+
+local function teleportToCursor()
+    local targetPosition = mouse.Hit.p
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 and UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) and not gameProcessed then
+        teleportToCursor()
+    end
+end)
+
 print("Todas funções foram carregadas.")
 
 local VCOP = Window:CreateTab("Opções Gerais", "mic")
@@ -568,8 +774,71 @@ local PlayerWalkspeed = VCOP:CreateSlider({
     Suffix = " Speed",
     CurrentValue = 16,
     Flag = "PlayerWalkspeed", 
-    Callback = function(Size_New)
-        player.Character.Humanoid.WalkSpeed = Size_New
+    Callback = function(PlayerWS)
+        player.Character.Humanoid.WalkSpeed = PlayerWS
+    end,
+})
+
+playerWalkspeedSlider = PlayerWalkspeed
+
+local DefaultPlayerWS = VCOP:CreateButton({
+    Name = "Definir Velocidade Padrão do Player",
+    Callback = function()
+        player.Character.Humanoid.WalkSpeed = 16
+        playerWalkspeedSlider:Set(16)
+    end,
+})
+
+local FlyKeybind = VCOP:CreateKeybind({
+    Name = "Atalho para (Levitação)",
+    CurrentKeybind = "F",
+    HoldToInteract = false,
+    Flag = "FlyKeybind",
+    Callback = function(Keybind)
+        toggleFly()
+    end,
+})
+
+local FlySpeedSlider = VCOP:CreateSlider({
+    Name = "Velocidade da Levitação",
+    Range = {0, 150},
+    Increment = 1,
+    Suffix = " Speed",
+    CurrentValue = flySpeed,
+    Flag = "FlySpeed",
+    Callback = function(speed)
+        flySpeed = speed
+    end,
+})
+
+local NoclipToggle = VCOP:CreateToggle({
+    Name = "Ativar/Desativar Noclip",
+    CurrentValue = false,
+    Flag = "NoclipToggle",
+    Callback = function(Value)
+        if Value ~= noclipEnabled then
+            toggleNoclip()
+        end
+    end,
+})
+
+local NoclipKeybind = VCOP:CreateKeybind({
+    Name = "Atalho para (Noclip)",
+    CurrentKeybind = "N",
+    HoldToInteract = false,
+    Flag = "NoclipKeybind",
+    Callback = function(Keybind)
+        toggleNoclip()
+        NoclipToggle:Set(noclipEnabled)
+    end,
+})
+
+local teleportKeybind = VCOP:CreateKeybind({
+    Name = "Atalho para (Teleportar ao Apertar)",
+    CurrentKeybind = "LeftControl",
+    HoldToInteract = true,
+    Flag = "TeleportKeybind",
+    Callback = function(Keybind)
     end,
 })
 
@@ -592,10 +861,9 @@ local VCRCButton = VCOP:CreateButton({
 local VCRCToggle = VCOP:CreateToggle({
    Name = "Reiniciar Serviço de Voz Automaticamente",
    CurrentValue = false,
-   Flag = "VCRCToggle", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "VCRCToggle",
    Callback = function(Value)
-   AutoVCRC() -- The function that takes place when the toggle is pressed
-   -- The variable (Value) is a boolean on whether the toggle is true or false
+   AutoVCRC()
    end,
 })
 
@@ -713,20 +981,6 @@ local LoadIY = SCPT:CreateButton({
    end,
 })
 
-local LoadIY = SCPT:CreateButton({
-    Name = "Carregar CMD-X (Luna/Wave/AWP - PC)",
-    Callback = function()
-     Rayfield:Notify({
-         NotifySound(),
-         Title = "Executando script...",
-         Content = "Carregando CMD-X. Aguarde alguns segundos, por favor.",
-         Duration = 2.5,
-         Image = "file-code",
-     })
-    CMDXScriptString()
-    end,
- })
-
 local LoadSB = SCPT:CreateButton({
    Name = "Carregar System Broken",
    Callback = function()
@@ -738,34 +992,6 @@ local LoadSB = SCPT:CreateButton({
     Image = "file-code",
     })
    SystemBrokenScriptString()
-   end,
-})
-
-local LoadEH = SCPT:CreateButton({
-   Name = "Carregar Eclipse Hub (Solara/Nihon/Wave/AWP - PC)",
-   Callback = function()
-    Rayfield:Notify({
-        NotifySound(),
-        Title = "Executando script...",
-        Content = "Carregando Eclipse Hub. Aguarde alguns segundos, por favor.",
-        Duration = 2.5,
-        Image = "file-code",
-     })
-   EclipseHubScriptString()
-   end,
-})
-
-local LoadGE = SCPT:CreateButton({
-   Name = "Carregar Graphics Enhancer",
-   Callback = function()
-    Rayfield:Notify({
-        NotifySound(),
-        Title = "Executando script...",
-        Content = "Carregando Graphics Enhancer. Aguarde alguns segundos, por favor.",
-        Duration = 2.5,
-        Image = "file-code",
-     })
-   GraphicsEnhancerScriptString()
    end,
 })
 
@@ -782,6 +1008,72 @@ local LoadFEG = SCPT:CreateButton({
    FreeEmotesGUIScriptString()
    end,
 })
+
+local LoadGE = SCPT:CreateButton({
+    Name = "Carregar Graphics Enhancer",
+    Callback = function()
+     Rayfield:Notify({
+         NotifySound(),
+         Title = "Executando script...",
+         Content = "Carregando Graphics Enhancer. Aguarde alguns segundos, por favor.",
+         Duration = 2.5,
+         Image = "file-code",
+      })
+    GraphicsEnhancerScriptString()
+    end,
+ })
+
+local LoadDEXEX = SCPT:CreateButton({
+    Name = "Carregar DEX Explorer",
+    Callback = function()
+        if isDeveloper(player) then
+            Rayfield:Notify({
+                NotifyDevSound(),
+                Title = "Executando script...",
+                Content = "Carregando DEX Explorer. Aguarde alguns segundos, por favor.",
+                Duration = 2.5,
+                Image = "file-code",
+            })
+            DEXExplorerScriptString()
+        else
+            Rayfield:Notify({
+                NotifyErrorSound(),
+                Title = "Acesso negado.",
+                Content = "A sua conta não tem permissão para usar esta função, somente contas de desenvolvedores.",
+                Duration = 5,
+                Image = "file-lock-2",
+            })
+        end
+    end,
+})
+
+local LoadEH = SCPT:CreateButton({
+    Name = "Carregar Eclipse Hub (Solara - PC)",
+    Callback = function()
+     Rayfield:Notify({
+         NotifySound(),
+         Title = "Executando script...",
+         Content = "Carregando Eclipse Hub. Aguarde alguns segundos, por favor.",
+         Duration = 2.5,
+         Image = "file-code",
+      })
+    EclipseHubScriptString()
+    end,
+ })
+
+ local LoadIY = SCPT:CreateButton({
+    Name = "Carregar CMD-X (Luna/Wave/AWP - PC)",
+    Callback = function()
+     Rayfield:Notify({
+         NotifySound(),
+         Title = "Executando script...",
+         Content = "Carregando CMD-X. Aguarde alguns segundos, por favor.",
+         Duration = 2.5,
+         Image = "file-code",
+     })
+    CMDXScriptString()
+    end,
+ })
 
 local LoadRVS = SCPT:CreateButton({
    Name = "Carregar Reverse Script (Segure E - PC)",
@@ -837,6 +1129,7 @@ local RejoinServer = CFGS:CreateButton({
             Duration = 3,
             Image = "server",
          })
+    wait(0.5)
     game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,game.JobId) 
     end,
  })
@@ -864,7 +1157,18 @@ local RejoinServer = CFGS:CreateButton({
 print("@nyxz.os")
 print(":)")
 
-wait(10)
+if isDeveloper(player) then
+	wait(10.5)
+    Rayfield:Notify({
+        NotifyDevSound(),
+        Title = "Conta de Desenvolvedor",
+        Content = "Você está em uma conta que está na lista de desenvolvedor, algumas funções estão exclusivamente disponíveis para essas contas.",
+        Duration = 10,
+        Image = "code-xml",
+    })
+end
+
+wait(10.5)
 
  Rayfield:Notify({
     NotifySound(),
@@ -899,5 +1203,15 @@ if not isValidPlace then
     Image = "triangle-alert",
  })
 end
+
+wait(15.5)
+
+Rayfield:Notify({
+    NotifySound(),
+    Title = "Versão 1.6 (12/02/25)",
+    Content = "[+] Levitação\n[+] Noclip\n[+] Teleportar ao Apertar\nAlgumas melhores e correções de bugs.\nAproveite, " .. player.Name.. ". :)",
+    Duration = 15,
+    Image = "book-marked",
+})
 
 -- This script ends here.

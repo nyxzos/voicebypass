@@ -29,7 +29,7 @@ local blacklist = {
 
 local devIds = {
     1827004776, -- nyyztx
-    0,
+    1340011660, -- weslleygg15
 }
 
 local function isBlacklisted(player)

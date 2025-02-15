@@ -23,13 +23,18 @@ if not Rayfield then
 end
 
 local blacklist = {
-    0,
+    4274673149, -- boracalo
     0,
 }
 
 local devIds = {
-    1827004776, -- nyyztx
+    1827004776, -- nyyztx - owner/dev
+    5796556085, -- Taffinii_san - subowner
     1340011660, -- weslleygg15
+    1027026818, -- howcyber
+    1003669370, -- pedroliragenari11
+    1356740893, -- GuiFangsOfc_YT
+    1241851575, -- SrMado
 }
 
 local function isBlacklisted(player)

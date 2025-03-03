@@ -1,26 +1,26 @@
-if _G.ScriptExecuted == nil then
-    _G.ScriptExecuted = false
-end
-
-if _G.ScriptExecuted then
-    warn("Script já está em execução, ative nas configurações para permitir múltiplas execuções.")
-    return
-else
-    _G.ScriptExecuted = true
-end
-
 print("Carregando Script")
 
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local scriptversion = 1.7
 
 print("Carregando Interface")
 
-local player = game:GetService("Players").LocalPlayer
+local Rayfield = loadstring(game:HttpGet('https://pastebin.com/raw/2x87Kzr1'))()
+
+Rayfield:Notify({
+    Title = "Inicializando...",
+    Content = "Por favor, aguarde.",
+    Duration = 1.5,
+    Image = "triangle-alert",
+ })
+
+print("Verificando IDs")
 
 if not Rayfield then
     warn("Interface não foi carregada.")
     return
 end
+
+local player = game:GetService("Players").LocalPlayer
 
 local blacklist = {
     4274673149, -- boracalo
@@ -29,7 +29,8 @@ local blacklist = {
 
 local devIds = {
     1827004776, -- nyyztx - owner/dev
-    5796556085, -- Taffinii_san - subowner
+    12649735, -- u5auucdp8o5sm3v - owner/dev
+    5796556085, -- Taffinii_san - subowner <3
     1340011660, -- weslleygg15
     1027026818, -- howcyber
     1003669370, -- pedroliragenari11
@@ -67,13 +68,6 @@ end
 
 local player = game.Players.LocalPlayer
 
-Rayfield:Notify({
-   Title = "Inicializando...",
-   Content = "Por favor, aguarde.",
-   Duration = 1.5,
-   Image = "triangle-alert",
-})
-
 local function getGreeting()
     local hour = tonumber(os.date("%H")) 
 
@@ -89,10 +83,10 @@ end
 local greeting = getGreeting()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Bypass de Voz - " .. greeting .. ", " .. player.Name .. "! ",
-    Icon = "audio-lines",
-    LoadingTitle = greeting .. ", " .. player.Name .. "!",
-    LoadingSubtitle = "Feito por @nyxz.os",
+    Name = "Midnight.im | " .. player.DisplayName .. " | " .. scriptversion,
+    Icon = 90950535175161,
+    LoadingTitle = greeting .. ", " .. player.DisplayName .. "!",
+    LoadingSubtitle = "Carregando Midnight...",
     Theme = "Default",
  
     DisableRayfieldPrompts = true,
@@ -100,8 +94,8 @@ local Window = Rayfield:CreateWindow({
  
     ConfigurationSaving = {
        Enabled = false,
-       FolderName = "BypassForMicUp",
-       FileName = "Config"
+       FolderName = "Midnight.im",
+       FileName = "scriptcfg"
     },
  
     Discord = {
@@ -166,8 +160,8 @@ end
 
 Rayfield:Notify({
     NotifySound(),
-    Title = "Bem-vindo, " .. player.Name .. "!",
-    Content = "Aviso! Caso você seja denunciado em massa, sua conta poderá ser banida por um dia ou mais.",
+    Title = "Bem-vindo, " .. player.DisplayName .. "!",
+    Content = "Lembre-se, a sua conta poderá ser facilmente suspensa caso seja denunciada em massa, então use com moderação e não venha reclamar comigo depois. :)",
     Duration = 10,
     Image = "triangle-alert",
  })
@@ -178,6 +172,13 @@ function VCReconnect()
 local voiceChatService = game:GetService("VoiceChatService")
     if voiceChatService then
         voiceChatService:joinVoice()
+        Rayfield:Notify({
+            NotifySound(),
+            Title = "Alerta!",
+            Content = "Reiniciando 'VoiceChatService'.",
+            Duration = 3,
+            Image = "unplug",
+         })
     else
         Rayfield:Notify({
             NotifyErrorSound(),
@@ -205,15 +206,14 @@ function AutoVCRC()
                 wait(retryCooldown)
                 local success, err = pcall(function()
                     wait(0.5)
-                    print("Reiniciando Serviço de Voz, aguarde...")
                     vc_service:joinVoice()
                     Rayfield:Notify({
                         NotifySound(),
-    Title = "Alerta!",
-    Content = "O Serviço de voz está sendo reiniciado! Por favor, aguarde.",
-    Duration = 3,
-    Image = "unplug",
- })
+                        Title = "Alerta!",
+                        Content = "Reiniciando 'VoiceChatService'.",
+                        Duration = 3,
+                        Image = "unplug",
+                     })
                 end)
                 if not success then
                     warn("Ocorreu um erro.", err)
@@ -269,8 +269,6 @@ bloom.Parent = light
 sun.Parent = light
 blur.Parent = light
 
--- enable or disable shit
-
 local config = {
 
 	Terrain = true;
@@ -280,8 +278,6 @@ local config = {
 	BloomEffect = true;
 	
 }
-
--- settings {
 
 color.Enabled = false
 color.Contrast = 0.15
@@ -304,8 +300,6 @@ bloom.Threshold = 1
 blur.Enabled = false
 blur.Size = 6
 
--- settings }
-
 
 if config.ColorCorrection then
 	color.Enabled = true
@@ -318,18 +312,15 @@ end
 
 
 if config.Terrain then
-	-- settings {
 	ter.WaterColor = Color3.fromRGB(10, 10, 24)
 	ter.WaterWaveSize = 0.15
 	ter.WaterWaveSpeed = 22
 	ter.WaterTransparency = 1
 	ter.WaterReflectance = 0.05
-	-- settings }
 end
 
 
 if config.Lighting then
-	-- settings {
 	light.Ambient = Color3.fromRGB(0, 0, 0)
 	light.Brightness = 4
 	light.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
@@ -339,7 +330,6 @@ if config.Lighting then
 	light.GlobalShadows = true
 	light.OutdoorAmbient = Color3.fromRGB(112, 117, 128)
 	light.Outlines = false
-	-- settings }
 end
 end
 
@@ -519,11 +509,10 @@ function AudioInputToggle()
              })
         end
     else
-        warn("AudioDeviceInput não encontrado!")
         Rayfield:Notify({
             NotifyErrorSound(),
             Title = "Erro!",
-            Content = "Algo inesperado aconteceu. 'AudioDeviceInput' não está disponível. :(",
+            Content = "Algo inesperado aconteceu. AudioDeviceInput não está disponível. :(",
             Duration = 5,
             Image = "ban",
          })
@@ -545,14 +534,6 @@ function PrivateRoomAntiKill()
     end
 
     if not isAllowed then
-        warn("Essa opção não pode ser usado neste jogo. ID " .. currentGameId)
-            Rayfield:Notify({
-                NotifyErrorSound(),
-                Title = "Erro!",
-                Content = "Essa opção não está disponível para outros jogos.",
-                Duration = 3,
-                Image = "ban",
-             })
         return
     end
     
@@ -564,13 +545,6 @@ function PrivateRoomAntiKill()
                 touchInterest:Destroy()
             end
             descendant:Destroy()
-            Rayfield:Notify({
-                NotifySound(),
-                Title = "Aplicado!",
-                Content = "Você não irá mais morrer após tocar o chão da sala privada. :)",
-                Duration = 3,
-                Image = "check",
-             })
         end
     end
 end
@@ -760,17 +734,100 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
+print("Carregando Função [ClearChat]")
+
+local function ClearChat()
+    if game:GetService("TextChatService").ChatVersion == Enum.ChatVersion.TextChatService then
+        game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("hi\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\r\rCleared Chat.")
+    end
+end
+
+print("Carregando Função [teleportToPlayer]")
+
+local function teleportToPlayer(targetPlayer)
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+    end
+end
+
+print("Carregando Função [getPlayerDisplayNames]")
+
+local function getPlayerDisplayNames()
+    local displayNames = {}
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= game.Players.LocalPlayer then
+            table.insert(displayNames, player.DisplayName .. " (@" .. player.Name .. ")")
+        end
+    end
+    table.sort(displayNames)
+    return displayNames
+end
+
+print("Carregando Função [getPlayerByDisplayName]")
+
+local function getPlayerByDisplayName(displayName)
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.DisplayName .. " (@" .. player.Name .. ")" == displayName then
+            return player
+        end
+    end
+    return nil
+end
+
+local notifyOnPlayerJoin = true
+local notifyOnPlayerLeave = true
+local notifyFriendsOnly = true
+
+print("Carregando Função [onPlayerAdded]")
+
+local function onPlayerAdded(player)
+    if notifyOnPlayerJoin then
+        if not notifyFriendsOnly or game.Players.LocalPlayer:IsFriendsWith(player.UserId) then
+            Rayfield:Notify({
+                NotifySound(),
+                Title = "Jogador entrou!",
+                Content = player.DisplayName .. " (@" .. player.Name .. ") entrou no jogo.",
+                Duration = 5,
+                Image = "user-plus",
+            })
+        end
+    end
+end
+
+print("Carregando Função [onPlayerRemoving]")
+
+local function onPlayerRemoving(player)
+    if notifyOnPlayerLeave then
+        if not notifyFriendsOnly or game.Players.LocalPlayer:IsFriendsWith(player.UserId) then
+            Rayfield:Notify({
+                NotifySound(),
+                Title = "Jogador saiu!",
+                Content = player.DisplayName .. " (@" .. player.Name .. ") saiu do jogo.",
+                Duration = 5,
+                Image = "user-minus",
+            })
+        end
+    end
+end
+
 print("Todas funções foram carregadas.")
 
-local VCOP = Window:CreateTab("Opções Gerais", "mic")
+-- Auto Execute Function
 
-local SCPT = Window:CreateTab("Outros Scripts", "file-code-2")
+PrivateRoomAntiKill()
 
-local CFGS = Window:CreateTab("Configurações", "wrench")
+-- Tabs
+
+local VCOP = Window:CreateTab("Opções Gerais", "user-round")
+
+local SCPT = Window:CreateTab("Outros Scripts", "package")
+
+local CFGS = Window:CreateTab("Configurações", "settings")
 
 -- Voice Options (VCOP)
 
-local VCOPSelf = VCOP:CreateLabel("Coisas relacionadas ao seu player.", "person-standing")
+local SelfOptionsSection = VCOP:CreateSection("Personagem")
 
 local PlayerWalkspeed = VCOP:CreateSlider({
     Name = "Velocidade do Player",
@@ -796,7 +853,7 @@ local DefaultPlayerWS = VCOP:CreateButton({
 
 local FlyKeybind = VCOP:CreateKeybind({
     Name = "Atalho para (Levitação)",
-    CurrentKeybind = "F",
+    CurrentKeybind = "V",
     HoldToInteract = false,
     Flag = "FlyKeybind",
     Callback = function(Keybind)
@@ -838,6 +895,8 @@ local NoclipKeybind = VCOP:CreateKeybind({
     end,
 })
 
+local PlayerTPSection = VCOP:CreateSection("Teleporte")
+
 local teleportKeybind = VCOP:CreateKeybind({
     Name = "Atalho para (Teleportar ao Apertar)",
     CurrentKeybind = "LeftControl",
@@ -847,24 +906,39 @@ local teleportKeybind = VCOP:CreateKeybind({
     end,
 })
 
-local VCOPService = VCOP:CreateLabel("Opções do serviço de voz.", "radio")
+local teleportDropdown = VCOP:CreateDropdown({
+    Name = "Teleportar para Jogador",
+    Options = getPlayerDisplayNames(),
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "TeleportDropdown",
+    Callback = function(Options)
+        local targetPlayer = getPlayerByDisplayName(Options[1])
+        if targetPlayer then
+            teleportToPlayer(targetPlayer)
+        end
+    end,
+})
+
+game.Players.PlayerAdded:Connect(function()
+    teleportDropdown:Refresh(getPlayerDisplayNames(), true)
+end)
+
+game.Players.PlayerRemoving:Connect(function()
+    teleportDropdown:Refresh(getPlayerDisplayNames(), true)
+end)
+
+local ChatRelatedSection = VCOP:CreateSection("Chat (Voz/Texto)")
 
 local VCRCButton = VCOP:CreateButton({
-   Name = "Reiniciar Serviço de Voz",
+   Name = "Reiniciar Voice Chat",
    Callback = function()
    VCReconnect()
-   Rayfield:Notify({
-    NotifySound(),
-    Title = "Alerta!",
-    Content = "O Serviço de voz está sendo reiniciado! Por favor, aguarde.",
-    Duration = 3,
-    Image = "unplug",
- })
    end,
 })
 
 local VCRCToggle = VCOP:CreateToggle({
-   Name = "Reiniciar Serviço de Voz Automaticamente",
+   Name = "Reiniciar Voice Chat Automaticamente",
    CurrentValue = false,
    Flag = "VCRCToggle",
    Callback = function(Value)
@@ -873,19 +947,12 @@ local VCRCToggle = VCOP:CreateToggle({
 })
 
 local KeybindVCRC = VCOP:CreateKeybind({
-   Name = "Atalho para (Reiniciar Serviço)",
+   Name = "Atalho para (Reiniciar Voice Chat)",
    CurrentKeybind = "L",
    HoldToInteract = false,
    Flag = "KeybindVCRC",
    Callback = function(Keybind)
    VCReconnect()
-   Rayfield:Notify({
-    NotifySound(),
-    Title = "Alerta!",
-    Content = "O Serviço de voz está sendo reiniciado! Por favor, aguarde.",
-    Duration = 3,
-    Image = "unplug",
- })
    end,
 })
 
@@ -899,7 +966,24 @@ local KeybindMicInput = VCOP:CreateKeybind({
     end,
  })
 
-local VCOPMap = VCOP:CreateLabel("Baseplate e outras coisas relacionada ao mapa.", "map")
+ local ClearChatButton = VCOP:CreateButton({
+    Name = "Limpar o chat de texto (Whitelist Option)",
+    Callback = function()
+        if isDeveloper(player) then
+            ClearChat()
+        else
+            Rayfield:Notify({
+                NotifyErrorSound(),
+                Title = "Acesso negado.",
+                Content = "A sua conta não tem permissão para usar esta função, somente contas de desenvolvedores.",
+                Duration = 3,
+                Image = "file-lock-2",
+            })
+        end
+    end,
+ })
+
+local MapRelatedSection = VCOP:CreateSection("Mapa")
 
 local BaseplateSizeZ = VCOP:CreateSlider({
     Name = "Tamanho do Baseplate (Z)",
@@ -931,17 +1015,10 @@ Callback = function(Size_New)
 end,
 })
 
-local PRAK = VCOP:CreateButton({
-    Name = "Desativar Morte na Sala Privada",
-    Callback = function()
-    PrivateRoomAntiKill()
-    end,
- })
-
-local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
+local LightingSection = VCOP:CreateSection("Iluminação")
 
  local SetNightWithLight = VCOP:CreateButton({
-    Name = "Alterar Horário para Noite",
+    Name = "Alterar horário para noite",
     Callback = function()
     SetNightWLight()
     Rayfield:Notify({
@@ -955,7 +1032,7 @@ local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
  })
  
  local SetDayTime = VCOP:CreateButton({
-    Name = "Alterar Horário para Dia",
+    Name = "Alterar horário para dia",
     Callback = function()
     SetDayTime() NotifySound()
     Rayfield:Notify({
@@ -970,7 +1047,7 @@ local VCOPDayTime = VCOP:CreateLabel("Alterar horário do jogo.", "clock")
 
 -- Other Scripts (SCPT)
 
-local SCPTLabel = SCPT:CreateLabel("Carregar outros scripts úteis.", "file-terminal")
+local OtherScriptsSection = SCPT:CreateSection("Scripts disponíveis")
 
 local LoadIY = SCPT:CreateButton({
    Name = "Carregar Infinite Yield",
@@ -1028,32 +1105,8 @@ local LoadGE = SCPT:CreateButton({
     end,
  })
 
-local LoadDEXEX = SCPT:CreateButton({
-    Name = "Carregar DEX Explorer",
-    Callback = function()
-        if isDeveloper(player) then
-            Rayfield:Notify({
-                NotifyDevSound(),
-                Title = "Executando script...",
-                Content = "Carregando DEX Explorer. Aguarde alguns segundos, por favor.",
-                Duration = 2.5,
-                Image = "file-code",
-            })
-            DEXExplorerScriptString()
-        else
-            Rayfield:Notify({
-                NotifyErrorSound(),
-                Title = "Acesso negado.",
-                Content = "A sua conta não tem permissão para usar esta função, somente contas de desenvolvedores.",
-                Duration = 5,
-                Image = "file-lock-2",
-            })
-        end
-    end,
-})
-
 local LoadEH = SCPT:CreateButton({
-    Name = "Carregar Eclipse Hub (Solara - PC)",
+    Name = "Carregar Eclipse Hub Lite (PC)",
     Callback = function()
      Rayfield:Notify({
          NotifySound(),
@@ -1067,7 +1120,7 @@ local LoadEH = SCPT:CreateButton({
  })
 
  local LoadIY = SCPT:CreateButton({
-    Name = "Carregar CMD-X (Luna/Wave/AWP - PC)",
+    Name = "Carregar CMD-X (PC)",
     Callback = function()
      Rayfield:Notify({
          NotifySound(),
@@ -1108,7 +1161,7 @@ local LoadFC = SCPT:CreateButton({
     end,
  })
 
- local LoadFC = SCPT:CreateButton({
+local LoadFC = SCPT:CreateButton({
     Name = "Carregar Invisible Script (Aperte C - PC)",
     Callback = function()
      Rayfield:Notify({
@@ -1120,17 +1173,77 @@ local LoadFC = SCPT:CreateButton({
       })
         InvisibleScriptString()
     end,
- })
+})
+
+local DevOnlyScptSection = SCPT:CreateSection("Scripts (Desenvolvedores)")
+
+local LoadDEXEX = SCPT:CreateButton({
+    Name = "Carregar DEX Explorer",
+    Callback = function()
+        if isDeveloper(player) then
+            Rayfield:Notify({
+                NotifyDevSound(),
+                Title = "Executando script...",
+                Content = "Carregando DEX Explorer. Aguarde alguns segundos, por favor.",
+                Duration = 2.5,
+                Image = "file-code",
+            })
+            DEXExplorerScriptString()
+        else
+            Rayfield:Notify({
+                NotifyErrorSound(),
+                Title = "Acesso negado.",
+                Content = "A sua conta não tem permissão para usar esta função, somente contas de desenvolvedores.",
+                Duration = 5,
+                Image = "file-lock-2",
+            })
+        end
+    end,
+})
 
 -- Settings (CFGS)
 
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+game.Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+local NotifySettingsSection = CFGS:CreateSection("Notificações")
+
+local NotifyOnJoinToggle = CFGS:CreateToggle({
+    Name = "Notificar Entrada de Jogadores",
+    CurrentValue = notifyOnPlayerJoin,
+    Flag = "NotifyOnJoinToggle",
+    Callback = function(Value)
+        notifyOnPlayerJoin = Value
+    end,
+})
+
+local NotifyOnLeaveToggle = CFGS:CreateToggle({
+    Name = "Notificar Saída de Jogadores",
+    CurrentValue = notifyOnPlayerLeave,
+    Flag = "NotifyOnLeaveToggle",
+    Callback = function(Value)
+        notifyOnPlayerLeave = Value
+    end,
+})
+
+local NotifyFriendsOnlyToggle = CFGS:CreateToggle({
+    Name = "Notificar Entrada/Saida Somente de Amigos",
+    CurrentValue = notifyFriendsOnly,
+    Flag = "NotifyFriendsOnlyToggle",
+    Callback = function(Value)
+        notifyFriendsOnly = Value
+    end,
+})
+
+local ServerRelatedSection = CFGS:CreateSection("Servidor")
+
 local RejoinServer = CFGS:CreateButton({
-    Name = "Reingressar no Servidor",
+    Name = "Reconectar ao servidor",
     Callback = function()
         Rayfield:Notify({
             NotifySound(),
-            Title = "Reingressando no servidor.",
-            Content = "Por favor, aguarde...",
+            Title = "Reconectando.",
+            Content = "Por favor, aguarde.",
             Duration = 3,
             Image = "server",
          })
@@ -1139,20 +1252,43 @@ local RejoinServer = CFGS:CreateButton({
     end,
  })
 
+ local RejoinServerAuto = CFGS:CreateToggle({
+    Name = "Reconectar automaticamente após desconexão",
+    CurrentValue = false,
+    Flag = "RejoinServerAutoToggle", 
+    Callback = function(Value)
+        repeat wait() until game.CoreGui:FindFirstChild('RobloxPromptGui')
+
+        local lp = game:GetService('Players').LocalPlayer
+        local po = game.CoreGui.RobloxPromptGui.promptOverlay
+        local ts = game:GetService('TeleportService')
+
+        po.ChildAdded:Connect(function(a)
+        if a.Name == 'ErrorPrompt' then
+            repeat
+                ts:Teleport(game.PlaceId)
+                wait(2)
+            until false
+        end
+    end)
+
+    game:GetService("Players").PlayerRemoving:Connect(function(player)
+        if player == lp then
+            ts:Teleport(game.PlaceId)
+            end
+        end)
+    end,
+})
+
+local ScriptSection = CFGS:CreateSection("Script")
+
  local AllowMultiInstanceToggle = CFGS:CreateToggle({
     Name = "Permitir que seja executado mais de uma vez",
-    CurrentValue = not _G.ScriptExecuted,
+    CurrentValue =  _G.ScriptExecuted,
     Flag = "AllowMultiInstanceToggle", 
     Callback = function(Value)
         if Value then
             _G.ScriptExecuted = false
-            Rayfield:Notify({
-                NotifySound(),
-                Title = "Execução permitida!",
-                Content = "O script pode ser executado mais de uma vez agora.",
-                Duration = 3,
-                Image = "check",
-            })
         else
             _G.ScriptExecuted = true
         end
@@ -1166,10 +1302,10 @@ if isDeveloper(player) then
 	wait(10.5)
     Rayfield:Notify({
         NotifyDevSound(),
-        Title = "Conta de Desenvolvedor",
-        Content = "Você está em uma conta que está na lista de desenvolvedor, algumas funções estão exclusivamente disponíveis para essas contas.",
-        Duration = 10,
-        Image = "code-xml",
+        Title = "Ativação concluída.",
+        Content = "Account ID : " .. player.UserId,
+        Duration = 5,
+        Image = "badge-check",
     })
 end
 
@@ -1177,46 +1313,20 @@ wait(10.5)
 
  Rayfield:Notify({
     NotifySound(),
-    Title = "Como usar?",
-    Content = "Após levar a suspensão, abra o script e aperte na opção de reiniciar o serviço de voz. Você também pode usar o modo automático.",
-    Duration = 15,
+    Title = "Precisa de ajuda?",
+    Content = "Deixa de ser bobo e aprende a usar o script sozinho. :)",
+    Duration = 5,
     Image = "circle-help",
  })
 
-wait(15.5)
-
-local validPlaceIds = {6884319169, 15546218972}
-
-local isValidPlace = false
-for _, placeId in pairs(validPlaceIds) do
-    if game.PlaceId == placeId then
-        isValidPlace = true
-        break
-    end
-end
-
-if not isValidPlace then
-	warn("Você está um jogo que não está listado, isso pode causar erros de Callback.")
-	warn("Jogos listados :")
-    warn("MIC UP")
-    warn("MIC UP +17")
-    Rayfield:Notify({
-    NotifySound(),
-    Title = "Alerta!",
-    Content = "Algumas funções desse script funcionam somente no (MIC UP), isso pode causar Callback Error se for usada em alguns jogos.",
-    Duration = 15,
-    Image = "triangle-alert",
- })
-end
-
-wait(15.5)
+wait(5.5)
 
 Rayfield:Notify({
     NotifySound(),
-    Title = "Versão 1.6 (12/02/25)",
-    Content = "[+] Levitação\n[+] Noclip\n[+] Teleportar ao Apertar\nAlgumas melhores e correções de bugs.\nAproveite, " .. player.Name.. ". :)",
-    Duration = 15,
-    Image = "book-marked",
+    Title = "Versão do Midnight : " .. scriptversion,
+    Content = "Caso você tenha alguma sugestão ou queira reportar um bug, entre em contato comigo. :)",
+    Duration = 5,
+    Image = 90950535175161,
 })
 
 -- This script ends here.

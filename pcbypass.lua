@@ -1,3 +1,14 @@
+if _G.ScriptExecuted == nil then
+    _G.ScriptExecuted = false
+end
+
+if _G.ScriptExecuted then
+    warn("Script já em execução, ative nas configurações para permitir múltiplas execuções.")
+    return
+else
+    _G.ScriptExecuted = true
+end
+
 print("Carregando Script")
 
 local scriptversion = 1.7
@@ -811,6 +822,24 @@ local function onPlayerRemoving(player)
     end
 end
 
+print("Carregando Função [toggleAntiAfk]")
+
+local function toggleAntiAfk()
+    antiAfkEnabled = not antiAfkEnabled
+    if antiAfkEnabled then
+        print("Anti-AFK ativado.")
+        game:GetService("Players").LocalPlayer.Idled:Connect(function()
+            if antiAfkEnabled then
+                game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+                wait(1)
+                game:GetService("VirtualUser"):Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+            end
+        end)
+    else
+        print("Anti-AFK desativado.")
+    end
+end
+
 print("Todas funções foram carregadas.")
 
 -- Auto Execute Function
@@ -1277,6 +1306,15 @@ local RejoinServer = CFGS:CreateButton({
             ts:Teleport(game.PlaceId)
             end
         end)
+    end,
+})
+
+local AntiAfkToggle = CFGS:CreateToggle({
+    Name = "Não ser expulso por inatividade",
+    CurrentValue = antiAfkEnabled,
+    Flag = "AntiAfkToggle",
+    Callback = function(Value)
+        toggleAntiAfk()
     end,
 })
 

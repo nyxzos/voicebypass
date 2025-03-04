@@ -47,6 +47,7 @@ local devIds = {
     1003669370, -- pedroliragenari11
     1356740893, -- GuiFangsOfc_YT
     1241851575, -- SrMado
+    5173694911, -- Koduzinho
 }
 
 local function isBlacklisted(player)
